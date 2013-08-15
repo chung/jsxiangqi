@@ -122,11 +122,11 @@ bq.Chessboard.prototype.newGame = function() {
   // Red to move first
   this.turn_ = bq.Chesspiece.Color.RED;
   var elem = this.getElement();
-  for(var j = 0; j < this.grid_.length; j++) {
+  for (var j = 0; j < this.grid_.length; j++) {
     var row = this.grid_[j];
-    for(var i = 0; i < row.length; i++) {
+    for (var i = 0; i < row.length; i++) {
       var piece = row[i];
-      if(piece) {
+      if (piece) {
         piece.render(elem);
         this.addChild(piece);
         this.movePiece(i, j, i, j);
@@ -147,7 +147,7 @@ bq.Chessboard.prototype.movePiece = function(i, j, x, y) {
   piece.setPosition(
       bq.ChessboardRenderer.X + x * bq.ChessboardRenderer.Step - pieceWidth / 2,
       bq.ChessboardRenderer.Y + y * bq.ChessboardRenderer.Step - pieceWidth / 2);
-  if(i != x || j != y) {
+  if (i != x || j != y) {
     console.log("moved a piece to: x=" + x + ", y=" + y);
     this.grid_[y][x] = piece;
     this.grid_[j][i] = null;
@@ -172,7 +172,7 @@ bq.Chessboard.prototype.getSelectedPiece = function() {
 bq.Chessboard.prototype.click = function(x, y) {
   var elem; // What element you clicked at?
   var clickedPiece = this.grid_[y][x];
-  if(clickedPiece === null) {
+  if (clickedPiece === null) {
     elem = this.element_; // No piece? you must clicked at the board element
   } else {
     elem = clickedPiece.getElement();
@@ -189,8 +189,8 @@ bq.Chessboard.prototype.click = function(x, y) {
 bq.Chessboard.prototype.handleClick_ = function(e) {
   var selectedPiece = this.getSelectedPiece();
   // If the chessboard is clicked
-  if(e.target === this.element_) {
-    if(selectedPiece) {
+  if (e.target === this.element_) {
+    if (selectedPiece) {
       var x = Math.floor((e.offsetX - bq.ChessboardRenderer.X) / bq.ChessboardRenderer.Step + 0.5);
       var y = Math.floor((e.offsetY - bq.ChessboardRenderer.Y) / bq.ChessboardRenderer.Step + 0.5);
       if (this.turn_ === selectedPiece.getColor()) {
@@ -205,30 +205,30 @@ bq.Chessboard.prototype.handleClick_ = function(e) {
   }
 
   var x, y, clickedPiece;
-  for(y = 0; y < 10; y++) {
+  for (y = 0; y < 10; y++) {
     var found = false;
-    for(x = 0; x < 9; x++) {
+    for (x = 0; x < 9; x++) {
       clickedPiece = this.grid_[y][x];
-      if(clickedPiece && clickedPiece.getElement() === e.target) {
+      if (clickedPiece && clickedPiece.getElement() === e.target) {
         found = true;
         break;
       }
     }
-    if(found) {
+    if (found) {
       console.log("found a piece at: x=" + x + ", y=" + y);
       break;
     }
   }
 
   // If there is no piece selected, mark the clicked piece as selected.
-  if(!selectedPiece) {
+  if (!selectedPiece) {
     this.x_ = x;
     this.y_ = y;
     clickedPiece.setSelected(true);
     return;
   }
   
-  if(selectedPiece === clickedPiece) {
+  if (selectedPiece === clickedPiece) {
     clickedPiece.setSelected(false);
     this.x_ = -1;
     this.y_ = -1;
@@ -237,7 +237,7 @@ bq.Chessboard.prototype.handleClick_ = function(e) {
 
   // If the clicked piece is not the one already selected, remove the
   // clicked piece and move the selected one to its position.
-  if(clickedPiece.getColor() !== selectedPiece.getColor()) {
+  if (clickedPiece.getColor() !== selectedPiece.getColor()) {
     clickedPiece.dispose();
     clickedPiece = null;
     this.grid_[y][x] = null;
