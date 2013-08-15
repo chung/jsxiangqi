@@ -48,7 +48,7 @@ describe("Chessboard", function() {
     board.click(0, 8); // try to move forward
     expect(board.at(0, 9)).toEqual(null);
     expect(board.at(0, 8)).toEqual(redChe1);
-    board.click(0, 8); // now select this piece
+    board.click(0, 8); // now select this piece again
     board.click(1, 8); // try to move side way
     expect(board.at(1, 8)).toEqual(null);
     expect(board.at(0, 8)).toEqual(redChe1);

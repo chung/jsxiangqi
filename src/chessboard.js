@@ -116,8 +116,11 @@ bq.Chessboard.prototype.x_ = -1;
 bq.Chessboard.prototype.y_ = -1;
 
 bq.Chessboard.prototype.newGame = function() {
-  if(!this.isInDocument())
+  if(!this.isInDocument()) {
     throw new Error('Call Chessboard.render() first.');
+  }
+  // Red to move first
+  this.turn_ = bq.Chesspiece.Color.RED;
   var elem = this.getElement();
   for(var j = 0; j < this.grid_.length; j++) {
     var row = this.grid_[j];
@@ -148,6 +151,7 @@ bq.Chessboard.prototype.movePiece = function(i, j, x, y) {
     console.log("moved a piece to: x=" + x + ", y=" + y);
     this.grid_[y][x] = piece;
     this.grid_[j][i] = null;
+    this.turn_ = 1 - this.turn_; // take turn
   }
 };
 
@@ -187,12 +191,12 @@ bq.Chessboard.prototype.handleClick_ = function(e) {
   // If the chessboard is clicked
   if(e.target === this.element_) {
     if(selectedPiece) {
-      var x = Math.floor(
-          (e.offsetX - bq.ChessboardRenderer.X) / bq.ChessboardRenderer.Step + 0.5);
-      var y = Math.floor(
-          (e.offsetY - bq.ChessboardRenderer.Y) / bq.ChessboardRenderer.Step + 0.5);
-      console.log("moving piece from x=" + this.x_ + ", y=" + this.y_);
-      this.movePiece(this.x_, this.y_, x, y);
+      var x = Math.floor((e.offsetX - bq.ChessboardRenderer.X) / bq.ChessboardRenderer.Step + 0.5);
+      var y = Math.floor((e.offsetY - bq.ChessboardRenderer.Y) / bq.ChessboardRenderer.Step + 0.5);
+      if (this.turn_ === selectedPiece.getColor()) {
+        console.log("moving piece from x=" + this.x_ + ", y=" + this.y_);
+        this.movePiece(this.x_, this.y_, x, y);
+      }
       this.x_ = -1;
       this.y_ = -1;
       selectedPiece.setSelected(false);
