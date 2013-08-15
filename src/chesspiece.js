@@ -102,6 +102,36 @@ bq.Chesspiece.prototype.getWidth = function() {
  * @param {number} top
  */
 bq.Chesspiece.prototype.setPosition = function(left, top) {
-  if(this.isInDocument())
+  if (this.isInDocument()) {
     this.getRenderer().setPosition(this.getElement(), left, top);
+  }
+};
+
+bq.Chesspiece.prototype.move = function(x, y) {
+  this.x = x;
+  this.y = y;
+  this.setPosition(this.getOffset(x), this.getOffset(y));
+};
+
+bq.Chesspiece.prototype.getPosition = function(offset) {
+  var pieceWidth = bq.ChesspieceRenderer.Width;
+  return Math.floor((offset - bq.ChessboardRenderer.X + pieceWidth/2) / bq.ChessboardRenderer.Step);
+};
+
+bq.Chesspiece.prototype.getOffset = function(x) {
+  var pieceWidth = bq.ChesspieceRenderer.Width;
+  return bq.ChessboardRenderer.X + x * bq.ChessboardRenderer.Step - pieceWidth / 2;
+};
+
+bq.Chesspiece.prototype.canMove = function(x, y) {
+  console.log("this.x is " + this.x + ", this.y is " + this.y);
+  if (this.getFace() === bq.Chesspiece.Face.BING) {
+    var movex = Math.pow(this.x - x, 2);
+	var movey = Math.pow(this.y - y, 2);
+	var oneStepOnly = (movex+movey) === 1;
+	var forwardOnly = (this.getColor() - 0.5) * (this.y - y) <= 0;
+	var sidewayOkAfterRiver = (this.getColor() - 0.5) * (this.y - 4.5) * movex >= 0;
+    return oneStepOnly && forwardOnly && sidewayOkAfterRiver;
+  }
+  return false;
 };

@@ -143,11 +143,8 @@ bq.Chessboard.prototype.newGame = function() {
  */
 bq.Chessboard.prototype.movePiece = function(i, j, x, y) {
   var piece = this.grid_[j][i];
-  var pieceWidth = piece.getWidth();
-  piece.setPosition(
-      bq.ChessboardRenderer.X + x * bq.ChessboardRenderer.Step - pieceWidth / 2,
-      bq.ChessboardRenderer.Y + y * bq.ChessboardRenderer.Step - pieceWidth / 2);
-  if (i != x || j != y) {
+  piece.move(x, y);
+  if (i !== x || j !== y) {
     console.log("moved a piece to: x=" + x + ", y=" + y);
     this.grid_[y][x] = piece;
     this.grid_[j][i] = null;
@@ -178,11 +175,11 @@ bq.Chessboard.prototype.click = function(x, y) {
     elem = clickedPiece.getElement();
   }
   var e = {
-    offsetX: x * bq.ChessboardRenderer.Step + bq.ChessboardRenderer.X,
-    offsetY: y * bq.ChessboardRenderer.Step + bq.ChessboardRenderer.Y,
+    offsetX: bq.Chesspiece.prototype.getOffset(x),
+    offsetY: bq.Chesspiece.prototype.getOffset(y),
     target: elem
   };
-  console.log(e.target);
+  console.log(e.offsetY);
   this.handleClick_(e);
 };
 
@@ -191,9 +188,9 @@ bq.Chessboard.prototype.handleClick_ = function(e) {
   // If the chessboard is clicked
   if (e.target === this.element_) {
     if (selectedPiece) {
-      var x = Math.floor((e.offsetX - bq.ChessboardRenderer.X) / bq.ChessboardRenderer.Step + 0.5);
-      var y = Math.floor((e.offsetY - bq.ChessboardRenderer.Y) / bq.ChessboardRenderer.Step + 0.5);
-      if (this.turn_ === selectedPiece.getColor()) {
+      var x = selectedPiece.getPosition(e.offsetX);
+      var y = selectedPiece.getPosition(e.offsetY);
+      if (this.turn_ === selectedPiece.getColor() && selectedPiece.canMove(x, y)) {
         console.log("moving piece from x=" + this.x_ + ", y=" + this.y_);
         this.movePiece(this.x_, this.y_, x, y);
       }
@@ -237,7 +234,7 @@ bq.Chessboard.prototype.handleClick_ = function(e) {
 
   // If the clicked piece is not the one already selected, remove the
   // clicked piece and move the selected one to its position.
-  if (clickedPiece.getColor() !== selectedPiece.getColor()) {
+  if (clickedPiece.getColor() !== selectedPiece.getColor() && selectedPiece.canMove(x, y)) {
     clickedPiece.dispose();
     clickedPiece = null;
     this.grid_[y][x] = null;
