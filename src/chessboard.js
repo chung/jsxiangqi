@@ -107,6 +107,8 @@ goog.inherits(bq.Chessboard, goog.ui.Control);
 
 bq.Chessboard.prototype.grid_ = undefined;
 
+bq.Chessboard.prototype.at = function(x, y) { return this.grid_[y][x]; };
+
 /**
  * @type {number} The coordinate of selected piece.
  */
@@ -143,6 +145,7 @@ bq.Chessboard.prototype.movePiece = function(i, j, x, y) {
       bq.ChessboardRenderer.X + x * bq.ChessboardRenderer.Step - pieceWidth / 2,
       bq.ChessboardRenderer.Y + y * bq.ChessboardRenderer.Step - pieceWidth / 2);
   if(i != x || j != y) {
+    console.log("moved a piece to: x=" + x + ", y=" + y);
     this.grid_[y][x] = piece;
     this.grid_[j][i] = null;
   }
@@ -159,18 +162,36 @@ bq.Chessboard.prototype.enterDocument = function() {
 };
 
 bq.Chessboard.prototype.getSelectedPiece = function() {
-  return (this.x_ == -1 || this.y_ == -1) ? null : this.grid_[this.y_][this.x_];
+  return (this.x_ === -1 || this.y_ === -1) ? null : this.grid_[this.y_][this.x_];
+};
+
+bq.Chessboard.prototype.click = function(x, y) {
+  var elem; // What element you clicked at?
+  var clickedPiece = this.grid_[y][x];
+  if(clickedPiece === null) {
+    elem = this.element_; // No piece? you must clicked at the board element
+  } else {
+    elem = clickedPiece.getElement();
+  }
+  var e = {
+    offsetX: x * bq.ChessboardRenderer.Step + bq.ChessboardRenderer.X,
+    offsetY: y * bq.ChessboardRenderer.Step + bq.ChessboardRenderer.Y,
+    target: elem
+  };
+  console.log(e.target);
+  this.handleClick_(e);
 };
 
 bq.Chessboard.prototype.handleClick_ = function(e) {
   var selectedPiece = this.getSelectedPiece();
   // If the chessboard is clicked
-  if(e.target == this.element_) {
+  if(e.target === this.element_) {
     if(selectedPiece) {
       var x = Math.floor(
           (e.offsetX - bq.ChessboardRenderer.X) / bq.ChessboardRenderer.Step + 0.5);
       var y = Math.floor(
           (e.offsetY - bq.ChessboardRenderer.Y) / bq.ChessboardRenderer.Step + 0.5);
+      console.log("moving piece from x=" + this.x_ + ", y=" + this.y_);
       this.movePiece(this.x_, this.y_, x, y);
       this.x_ = -1;
       this.y_ = -1;
@@ -184,13 +205,15 @@ bq.Chessboard.prototype.handleClick_ = function(e) {
     var found = false;
     for(x = 0; x < 9; x++) {
       clickedPiece = this.grid_[y][x];
-      if(clickedPiece && clickedPiece.getElement() == e.target) {
+      if(clickedPiece && clickedPiece.getElement() === e.target) {
         found = true;
         break;
       }
     }
-    if(found)
+    if(found) {
+      console.log("found a piece at: x=" + x + ", y=" + y);
       break;
+    }
   }
 
   // If there is no piece selected, mark the clicked piece as selected.
@@ -201,7 +224,7 @@ bq.Chessboard.prototype.handleClick_ = function(e) {
     return;
   }
   
-  if(selectedPiece == clickedPiece) {
+  if(selectedPiece === clickedPiece) {
     clickedPiece.setSelected(false);
     this.x_ = -1;
     this.y_ = -1;
@@ -210,7 +233,7 @@ bq.Chessboard.prototype.handleClick_ = function(e) {
 
   // If the clicked piece is not the one already selected, remove the
   // clicked piece and move the selected one to its position.
-  if(clickedPiece.getColor() != selectedPiece.getColor()) {
+  if(clickedPiece.getColor() !== selectedPiece.getColor()) {
     clickedPiece.dispose();
     clickedPiece = null;
     this.grid_[y][x] = null;
