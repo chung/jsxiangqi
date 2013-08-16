@@ -1,6 +1,5 @@
 describe("Chess board", function() {
-  var board;
-  var $ = function(x, y) { return {x: x, y: y, board: board}; };
+  var board, _ = function(x, y) { return {x: x, y: y, board: board}; };
   beforeEach(function() {
     board = new bq.Chessboard();
     board.render();
@@ -27,16 +26,16 @@ describe("Chess board", function() {
   });
 
   it("should allow Red to move first", function() {
-    expect($(4, 6)).canMove(4, 5); // red Bing
+    expect(_(4, 6)).canMove(4, 5); // red Bing
   });
 
   it("should not allow Black to move first", function() {
-    expect($(0, 3)).notMove(0, 4); // black Bing
+    expect(_(0, 3)).notMove(0, 4); // black Bing
   });
 
   it("should not allow Red to make 2 moves consecutively", function() {
-    expect($(4, 6)).canMove(4, 5); // red Bing move first
-    expect($(4, 5)).notMove(4, 4); // red Bing can not move gain
+    expect(_(4, 6)).canMove(4, 5); // red Bing move first
+    expect(_(4, 5)).notMove(4, 4); // red Bing can not move gain
   });
 
 });
