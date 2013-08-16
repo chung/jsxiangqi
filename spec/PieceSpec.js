@@ -25,4 +25,12 @@ describe("Chess piece", function() {
     expect(_(0, 4)).notMove(1, 4);
   });
 
+  it("JIANG should only move one step at a time", function() {
+    expect(_(4, 9)).canMove(4, 8);
+    expect(_(4, 0)).notMove(5, 1);
+    expect(_(4, 0)).canMove(4, 1);
+    expect(_(4, 8)).notMove(5, 7);
+    expect(_(4, 8)).canMove(5, 8);
+  });
+
 });

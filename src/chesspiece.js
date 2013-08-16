@@ -125,13 +125,16 @@ bq.Chesspiece.prototype.getOffset = function(x) {
 
 bq.Chesspiece.prototype.canMove = function(x, y) {
   console.log("this.x is " + this.x + ", this.y is " + this.y);
+  var movex = Math.pow(this.x - x, 2);
+  var movey = Math.pow(this.y - y, 2);
+  var oneStepOnly = (movex+movey) === 1;
   if (this.getFace() === bq.Chesspiece.Face.BING) {
-    var movex = Math.pow(this.x - x, 2);
-	var movey = Math.pow(this.y - y, 2);
-	var oneStepOnly = (movex+movey) === 1;
-	var forwardOnly = (this.getColor() - 0.5) * (this.y - y) <= 0;
-	var sidewayOkAfterRiver = (this.getColor() - 0.5) * (this.y - 4.5) * movex >= 0;
+    var forwardOnly = (this.getColor() - 0.5) * (this.y - y) <= 0;
+    var sidewayOkAfterRiver = (this.getColor() - 0.5) * (this.y - 4.5) * movex >= 0;
     return oneStepOnly && forwardOnly && sidewayOkAfterRiver;
+  }
+  else if (this.getFace() === bq.Chesspiece.Face.JIANG) {
+    return oneStepOnly;
   }
   return false;
 };
