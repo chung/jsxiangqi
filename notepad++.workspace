@@ -1,0 +1,40 @@
+<NotepadPlus>
+    <Project name="jsxiangqi">
+        <Folder name="images">
+            <File name="images\chessboard.gif" />
+            <File name="images\pieces.gif" />
+        </Folder>
+        <Folder name="lib">
+            <Folder name="jasmine-1.3.1">
+                <File name="lib\jasmine-1.3.1\jasmine-html.js" />
+                <File name="lib\jasmine-1.3.1\jasmine.css" />
+                <File name="lib\jasmine-1.3.1\jasmine.js" />
+                <File name="lib\jasmine-1.3.1\MIT.LICENSE" />
+            </Folder>
+        </Folder>
+        <Folder name="spec">
+            <File name="spec\BoardSpec.js" />
+            <File name="spec\PieceSpec.js" />
+            <File name="spec\SpecHelper.js" />
+        </Folder>
+        <Folder name="src">
+            <File name="src\chess.js" />
+            <File name="src\chessboard.js" />
+            <File name="src\chessboardrenderer.js" />
+            <File name="src\chesspiece.js" />
+            <File name="src\chesspiecerenderer.js" />
+        </Folder>
+        <Folder name="style">
+            <File name="style\chess.css" />
+            <File name="style\chessboard.css" />
+            <File name="style\chesspiece.css" />
+        </Folder>
+        <File name="build.cmd" />
+        <File name="chess.html" />
+        <File name="chess.js" />
+        <File name="COPYING" />
+        <File name="README.md" />
+        <File name="SpecRunner.html" />
+        <File name="notepad++.workspace" />
+    </Project>
+</NotepadPlus>
