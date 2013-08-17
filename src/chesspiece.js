@@ -124,7 +124,7 @@ bq.Chesspiece.prototype.getOffset = function(x) {
   return bq.ChessboardRenderer.X + x * bq.ChessboardRenderer.Step - pieceWidth / 2;
 };
 
-bq.Chesspiece.prototype.movable = function(board, x, y) {
+bq.Chesspiece.prototype.movableWithoutMateCheck = function(board, x, y) {
   var sign = this.getColor() * 2 - 1 // Red = -1, Black = 1
   var movex = Math.pow(this.x - x, 2);
   var movey = Math.pow(this.y - y, 2);
@@ -166,6 +166,40 @@ bq.Chesspiece.prototype.movable = function(board, x, y) {
 	}
     // otherwise move like CHE
     return straightLine && countInBetween === 0;
+  }
+  return false;
+};
+
+bq.Chesspiece.prototype.movable = function(board, x, y) {
+  console.log("\n\n-----------------------\n");
+  if (this.movableWithoutMateCheck(board, x, y)) {
+    var capture = board.at(x, y);
+    var ox = this.x;
+    var oy = this.y;
+    board.movePiece(ox, oy, x, y); // suppose we move the piece
+    var jx = board.jiang(1-board.turn_).x;
+    var jy = board.jiang(1-board.turn_).y;
+    var jx2 = board.jiang().x;
+    var jy2 = board.jiang().y;
+    var canMove = true;
+    // we need to check if any move from opponent can capture the JIANG
+    console.log("jx=" + jx + ", jy=" + jy + "\njx2=" + jx2 + ", jy2=" + jy2);
+    if (jx === jx2 && countPiecesInBetween(board, jx, jy, jx2, jy2) === 0) {
+      console.log("JIANGs facing directly not allowed");
+      canMove = false;
+    } else {
+      board.pieces(board.turn_).map(function(piece) {
+        console.log(piece);
+        if (piece.movableWithoutMateCheck(board, jx, jy)) {
+          canMove = false;
+          console.log("CHECK jx=" + jx + ", jy=" + jy);
+        }
+      });
+    }
+
+    board.movePiece(x, y, ox, oy); // undo the move
+    board.grid_[y][x] = capture;
+    return canMove;
   }
   return false;
 };

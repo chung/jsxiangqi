@@ -17,6 +17,6 @@ Currently there is no validation. You can move any piece to any position.
 ## TODOs
 
 A few enhancements:
- - Add validation: only allow correct moves.
+ - Add validation: only allow correct moves. [DONE]
  - Be able to new/export/save a game
 

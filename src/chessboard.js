@@ -135,6 +135,34 @@ bq.Chessboard.prototype.newGame = function() {
   }
 };
 
+bq.Chessboard.prototype.pieces = function(color) {
+  var result = []
+  for (var j = 0; j < this.grid_.length; j++) {
+    var row = this.grid_[j];
+    for (var i = 0; i < row.length; i++) {
+      var piece = row[i];
+      if (piece && piece.getColor() === color) {
+        result.push(piece);
+      }
+    }
+  }
+  return result;
+};
+
+bq.Chessboard.prototype.jiang = function(color) {
+  var turn = color !== undefined ? color: this.turn_;
+  for (var j = 0; j < this.grid_.length; j++) {
+    var row = this.grid_[j];
+    for (var i = 0; i < row.length; i++) {
+      var piece = row[i];
+      if (piece && piece.getColor() === turn &&
+          piece.getFace() === bq.Chesspiece.Face.JIANG) {
+        return piece;
+      }
+    }
+  }
+};
+
 /**
  * @param {number} i
  * @param {number} j
