@@ -59,5 +59,30 @@ describe("Chess piece", function() {
     expect(_(2, 7)).not.movable(0, 8);
   });
 
+  it("XIANG should only move in big diagonal", function() {
+    expect(_(2, 9)).movable(4, 7);
+    expect(_(2, 0)).movable(4, 2);
+    expect(_(4, 7)).movable(2, 5);
+    expect(_(4, 2)).movable(2, 0);
+    expect(_(6, 9)).not.movable(8, 8);
+    expect(_(2, 0)).not.movable(3, 2);
+  });
 
+  it("XIANG cannot move if blocked", function() {
+    expect(_(2, 9)).movable(4, 7);
+    expect(_(2, 0)).movable(4, 2);
+    expect(_(1, 9)).movable(3, 8); // MA blocks
+    expect(_(1, 0)).movable(3, 1);
+    expect(_(4, 7)).not.movable(2, 9); // blocked by MA
+    expect(_(4, 2)).not.movable(2, 0);
+  });
+
+  it("XIANG cannot move across the River", function() {
+    expect(_(2, 9)).movable(4, 7);
+    expect(_(2, 0)).movable(4, 2);
+    expect(_(4, 7)).movable(6, 5); // at the River
+    expect(_(4, 2)).movable(2, 4);
+    expect(_(6, 5)).not.movable(4, 3); // blocked by River
+    expect(_(2, 4)).not.movable(0, 6);
+  });
 });
