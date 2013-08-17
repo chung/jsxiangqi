@@ -42,4 +42,13 @@ describe("Chess piece", function() {
     expect(_(4, 2)).notMove(4, 3);
   });
 
+  it("MA should only move in L shape", function() {
+    expect(_(1, 9)).canMove(0, 7);
+    expect(_(1, 0)).canMove(2, 2);
+    expect(_(0, 7)).canMove(1, 9);
+    expect(_(2, 2)).canMove(1, 0);
+    expect(_(1, 9)).notMove(2, 8);
+    expect(_(1, 0)).notMove(3, 2);
+  });
+
 });

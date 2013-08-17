@@ -129,6 +129,7 @@ bq.Chesspiece.prototype.canMove = function(x, y) {
   var movex = Math.pow(this.x - x, 2);
   var movey = Math.pow(this.y - y, 2);
   var oneStepOnly = (movex+movey) === 1;
+  var threeStepsL = (movex+movey) === 5;
   if (this.getFace() === bq.Chesspiece.Face.BING) {
     var forwardOnly = (this.getColor() - 0.5) * (this.y - y) <= 0;
     var sidewayOkAfterRiver = (this.getColor() - 0.5) * (this.y - 4.5) * movex >= 0;
@@ -137,6 +138,9 @@ bq.Chesspiece.prototype.canMove = function(x, y) {
   else if (this.getFace() === bq.Chesspiece.Face.JIANG) {
     var withinPalace = [3,4,5].contains(x) && [0,1,2,7,8,9].contains(y);
     return oneStepOnly && withinPalace;
+  }
+  else if (this.getFace() === bq.Chesspiece.Face.MA) {
+    return threeStepsL;
   }
   return false;
 };
