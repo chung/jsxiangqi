@@ -97,4 +97,16 @@ describe("Chess piece", function() {
     expect(_(3, 7)).not.movable(2, 8);
     expect(_(5, 2)).not.movable(3, 2);
   });
+
+  it("CHE can move in straight line if no other piece blocking", function() {
+    expect(_(0, 9)).not.movable(0, 5);
+    expect(_(0, 9)).movable(0, 7);
+    expect(_(0, 0)).movable(0, 1);
+    expect(_(0, 7)).not.movable(3, 7); // blocked by PAO
+    expect(_(0, 7)).not.movable(1, 8); // no diagonal move
+    expect(_(0, 7)).movable(0, 8); // ok to back off
+    expect(_(0, 1)).movable(5, 1); // ok to move long distance
+    expect(_(0, 8)).movable(8, 8); // even longer distance
+    expect(_(5, 1)).movable(5, 9); // can capture the SHI across the River
+  });
 });
