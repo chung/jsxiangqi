@@ -24,6 +24,7 @@
 goog.provide('bq.Chesspiece');
 
 goog.require('goog.ui.Control');
+goog.require('bq.util'); // for Array.contains method
 goog.require('bq.ChesspieceRenderer');
 
 /**
@@ -124,7 +125,7 @@ bq.Chesspiece.prototype.getOffset = function(x) {
 };
 
 bq.Chesspiece.prototype.canMove = function(x, y) {
-  console.log("this.x is " + this.x + ", this.y is " + this.y);
+  //console.log("this.x is " + this.x + ", this.y is " + this.y);
   var movex = Math.pow(this.x - x, 2);
   var movey = Math.pow(this.y - y, 2);
   var oneStepOnly = (movex+movey) === 1;
@@ -134,7 +135,8 @@ bq.Chesspiece.prototype.canMove = function(x, y) {
     return oneStepOnly && forwardOnly && sidewayOkAfterRiver;
   }
   else if (this.getFace() === bq.Chesspiece.Face.JIANG) {
-    return oneStepOnly;
+    var withinPalace = [3,4,5].contains(x) && [0,1,2,7,8,9].contains(y);
+    return oneStepOnly && withinPalace;
   }
   return false;
 };

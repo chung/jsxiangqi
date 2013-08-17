@@ -33,4 +33,13 @@ describe("Chess piece", function() {
     expect(_(4, 8)).canMove(5, 8);
   });
 
+  it("JIANG should only move within the palace", function() {
+    expect(_(4, 9)).canMove(4, 8);
+    expect(_(4, 0)).canMove(4, 1);
+    expect(_(4, 8)).canMove(5, 8);
+    expect(_(4, 1)).canMove(4, 2);
+    expect(_(5, 8)).notMove(6, 8);
+    expect(_(4, 2)).notMove(4, 3);
+  });
+
 });

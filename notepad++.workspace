@@ -23,6 +23,7 @@
             <File name="src\chessboardrenderer.js" />
             <File name="src\chesspiece.js" />
             <File name="src\chesspiecerenderer.js" />
+            <File name="src\util.js" />
         </Folder>
         <Folder name="style">
             <File name="style\chess.css" />
