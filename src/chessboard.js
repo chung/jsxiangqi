@@ -179,7 +179,6 @@ bq.Chessboard.prototype.click = function(x, y) {
     offsetY: bq.Chesspiece.prototype.getOffset(y),
     target: elem
   };
-  console.log(e.offsetY);
   this.handleClick_(e);
 };
 
@@ -190,7 +189,7 @@ bq.Chessboard.prototype.handleClick_ = function(e) {
     if (selectedPiece) {
       var x = selectedPiece.getPosition(e.offsetX);
       var y = selectedPiece.getPosition(e.offsetY);
-      if (this.turn_ === selectedPiece.getColor() && selectedPiece.canMove(x, y)) {
+      if (this.turn_ === selectedPiece.getColor() && selectedPiece.movable(this, x, y)) {
         console.log("moving piece from x=" + this.x_ + ", y=" + this.y_);
         this.movePiece(this.x_, this.y_, x, y);
       }
@@ -234,7 +233,7 @@ bq.Chessboard.prototype.handleClick_ = function(e) {
 
   // If the clicked piece is not the one already selected, remove the
   // clicked piece and move the selected one to its position.
-  if (clickedPiece.getColor() !== selectedPiece.getColor() && selectedPiece.canMove(x, y)) {
+  if (clickedPiece.getColor() !== selectedPiece.getColor() && selectedPiece.movable(this, x, y)) {
     clickedPiece.dispose();
     clickedPiece = null;
     this.grid_[y][x] = null;

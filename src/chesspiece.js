@@ -124,15 +124,16 @@ bq.Chesspiece.prototype.getOffset = function(x) {
   return bq.ChessboardRenderer.X + x * bq.ChessboardRenderer.Step - pieceWidth / 2;
 };
 
-bq.Chesspiece.prototype.canMove = function(x, y) {
-  //console.log("this.x is " + this.x + ", this.y is " + this.y);
+bq.Chesspiece.prototype.movable = function(board, x, y) {
+  var sign = this.getColor() * 2 - 1 // Red = -1, Black = 1
   var movex = Math.pow(this.x - x, 2);
   var movey = Math.pow(this.y - y, 2);
   var oneStepOnly = (movex+movey) === 1;
   var threeStepsL = (movex+movey) === 5;
+
   if (this.getFace() === bq.Chesspiece.Face.BING) {
-    var forwardOnly = (this.getColor() - 0.5) * (this.y - y) <= 0;
-    var sidewayOkAfterRiver = (this.getColor() - 0.5) * (this.y - 4.5) * movex >= 0;
+    var forwardOnly = sign * (this.y - y) <= 0;
+    var sidewayOkAfterRiver = sign * (this.y - 4.5) * movex >= 0;
     return oneStepOnly && forwardOnly && sidewayOkAfterRiver;
   }
   else if (this.getFace() === bq.Chesspiece.Face.JIANG) {
@@ -140,7 +141,14 @@ bq.Chesspiece.prototype.canMove = function(x, y) {
     return oneStepOnly && withinPalace;
   }
   else if (this.getFace() === bq.Chesspiece.Face.MA) {
-    return threeStepsL;
+    var middle = function(x1, x2) {
+	  var m = Math.floor((x1 + x2)/2);
+	  return (x1 > x2) ? (m + x1 + x2 - 2*m) : m;
+	}
+    var mx = middle(this.x, x);
+    var my = middle(this.y, y);
+	var piece = board.at(mx, my); // blocking piece
+    return threeStepsL && !piece;
   }
   return false;
 };

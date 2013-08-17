@@ -51,4 +51,13 @@ describe("Chess piece", function() {
     expect(_(1, 0)).not.movable(3, 2);
   });
 
+  it("MA cannot move if blocked", function() {
+    expect(_(1, 9)).not.movable(3, 8);
+    expect(_(1, 9)).movable(2, 7);
+    expect(_(1, 0)).not.movable(3, 1);
+    expect(_(1, 0)).movable(0, 2);
+    expect(_(2, 7)).not.movable(0, 8);
+  });
+
+
 });
