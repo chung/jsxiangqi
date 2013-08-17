@@ -140,21 +140,23 @@ bq.Chesspiece.prototype.movable = function(board, x, y) {
   var blockingPiece = board.at(middle(this.x, x), middle(this.y, y));
   var behindRiver = sign * (y - 4.5) < 0;
   var straightLine = movex === 0 || movey === 0;
-  var nothingInBetween = function(a1, b1, a2, b2) {
+  var countInBetween = (function(a1, b1, a2, b2) {
+    var c = 0;
     if (a1 == a2) {
       var inc = (b1 < b2) ? 1 : -1;
       for (var b = b1 + inc; b !== b2; b += inc) {
-        if (board.at(a1, b)) return false;
+        if (board.at(a1, b)) { c += 1; }
       }
     }
     else if (b1 == b2) {
       var inc = (a1 < a2) ? 1 : -1;
       for (var a = a1 + inc; a !== a2; a += inc) {
-        if (board.at(a, b1)) return false;
+        if (board.at(a, b1)) { c += 1; }
       }
     }
-    return true;
-  };
+    return c;
+  })(this.x, this.y, x, y);
+
   if (this.getFace() === bq.Chesspiece.Face.BING) {
     var forwardOnly = sign * (this.y - y) <= 0;
     var sidewayOkAfterRiver = sign * (this.y - 4.5) * movex >= 0;
@@ -173,7 +175,16 @@ bq.Chesspiece.prototype.movable = function(board, x, y) {
     return smallDiagonal && withinPalace;
   }
   else if (this.getFace() === bq.Chesspiece.Face.CHE) {
-    return straightLine && nothingInBetween(this.x, this.y, x, y);
+    return straightLine && countInBetween === 0;
+  }
+  else if (this.getFace() === bq.Chesspiece.Face.PAO) {
+    var capture = board.at(x, y) && board.at(x, y).getColor() !== this.getColor();
+    if (capture) {
+      // PAO jumps over 1 piece to capture
+      return straightLine && countInBetween === 1;
+	}
+    // otherwise move like CHE
+    return straightLine && countInBetween === 0;
   }
   return false;
 };

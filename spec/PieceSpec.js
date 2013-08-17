@@ -109,4 +109,13 @@ describe("Chess piece", function() {
     expect(_(0, 8)).movable(8, 8); // even longer distance
     expect(_(5, 1)).movable(5, 9); // can capture the SHI across the River
   });
+
+  it("PAO move like CHE but jump over exactly 1 piece to capture", function() {
+    expect(_(1, 7)).not.movable(1, 2); // cannot capture since no piece in between
+    expect(_(1, 7)).movable(1, 0); // but can capture here
+    expect(_(1, 2)).not.movable(1, 9); // no longer legal move
+    expect(_(1, 2)).movable(1, 8); // but ok here
+    expect(_(1, 0)).not.movable(4, 0); // 2 pieces in between: no good
+    expect(_(1, 0)).movable(3, 0); // 1 piece in between: good
+  });
 });
