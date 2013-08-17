@@ -9,8 +9,8 @@ Function.prototype.method = function(name, func) {
 Array.method('contains', function(o) {
   for (var index in this) {
     if (index !== undefined && this[index] === o) {
-	  return true;
-	}
+      return true;
+    }
   }
   return false;
 });
