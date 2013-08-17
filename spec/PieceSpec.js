@@ -74,6 +74,8 @@ describe("Chess piece", function() {
     expect(_(1, 9)).movable(3, 8); // MA blocks
     expect(_(1, 0)).movable(3, 1);
     expect(_(4, 7)).not.movable(2, 9); // blocked by MA
+    expect(_(4, 7)).not.movable(6, 9); // the other XIANG there
+    expect(_(4, 7)).movable(6, 5); // legal move
     expect(_(4, 2)).not.movable(2, 0);
   });
 
@@ -83,6 +85,16 @@ describe("Chess piece", function() {
     expect(_(4, 7)).movable(6, 5); // at the River
     expect(_(4, 2)).movable(2, 4);
     expect(_(6, 5)).not.movable(4, 3); // blocked by River
+    expect(_(6, 5)).movable(4, 7);
     expect(_(2, 4)).not.movable(0, 6);
+  });
+
+  it("SHI should only move in small diagonal & inside the Palace", function() {
+    expect(_(3, 9)).movable(4, 8);
+    expect(_(3, 0)).movable(4, 1);
+    expect(_(4, 8)).movable(3, 7);
+    expect(_(4, 1)).movable(5, 2);
+    expect(_(3, 7)).not.movable(2, 8);
+    expect(_(5, 2)).not.movable(3, 2);
   });
 });

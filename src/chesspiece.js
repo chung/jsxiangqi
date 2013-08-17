@@ -131,6 +131,8 @@ bq.Chesspiece.prototype.movable = function(board, x, y) {
   var oneStepOnly = (movex+movey) === 1;
   var threeStepsL = (movex+movey) === 5;
   var bigDiagonal = (movex+movey) === 8;
+  var smallDiagonal = (movex+movey) === 2;
+  var withinPalace = [3,4,5].contains(x) && [0,1,2,7,8,9].contains(y);
   var middle = function(x1, x2) {
     var m = Math.floor((x1 + x2)/2);
     return (x1 > x2) ? (m + x1 + x2 - 2*m) : m;
@@ -144,7 +146,6 @@ bq.Chesspiece.prototype.movable = function(board, x, y) {
     return oneStepOnly && forwardOnly && sidewayOkAfterRiver;
   }
   else if (this.getFace() === bq.Chesspiece.Face.JIANG) {
-    var withinPalace = [3,4,5].contains(x) && [0,1,2,7,8,9].contains(y);
     return oneStepOnly && withinPalace;
   }
   else if (this.getFace() === bq.Chesspiece.Face.MA) {
@@ -152,6 +153,9 @@ bq.Chesspiece.prototype.movable = function(board, x, y) {
   }
   else if (this.getFace() === bq.Chesspiece.Face.XIANG) {
     return bigDiagonal && !blockingPiece && behindRiver;
+  }
+  else if (this.getFace() === bq.Chesspiece.Face.SHI) {
+    return smallDiagonal && withinPalace;
   }
   return false;
 };
