@@ -16,7 +16,7 @@
             <File name="spec\BoardSpec.js" />
             <File name="spec\PieceSpec.js" />
             <File name="spec\SpecHelper.js" />
-            <File name="spec\MateSpec.js" />
+            <File name="spec\RuleSpec.js" />
         </Folder>
         <Folder name="src">
             <File name="src\chess.js" />

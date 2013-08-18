@@ -6,6 +6,19 @@ describe("Chess rule", function() {
     board.newGame();
   });
 
+  it("should allow Red to move first", function() {
+    expect(_(4, 6)).movable(4, 5); // red Bing
+  });
+
+  it("should not allow Black to move first", function() {
+    expect(_(0, 3)).not.movable(0, 4); // black Bing
+  });
+
+  it("should not allow Red to make 2 moves consecutively", function() {
+    expect(_(4, 6)).movable(4, 5); // red Bing move first
+    expect(_(4, 5)).not.movable(4, 4); // red Bing can not move gain
+  });
+
   it("should not allow a move that result in the JIANG be captured in the next move", function() {
     expect(_(1, 7)).movable(1, 0);
     expect(_(3, 0)).not.movable(4, 1); // illegal move since PAO threaten to capture the JIANG

@@ -136,12 +136,13 @@ bq.Chessboard.prototype.newGame = function() {
 };
 
 bq.Chessboard.prototype.pieces = function(color) {
+  var turn = color !== undefined ? color: this.turn_;
   var result = []
   for (var j = 0; j < this.grid_.length; j++) {
     var row = this.grid_[j];
     for (var i = 0; i < row.length; i++) {
       var piece = row[i];
-      if (piece && piece.getColor() === color) {
+      if (piece && piece.getColor() === turn) {
         result.push(piece);
       }
     }
@@ -173,7 +174,6 @@ bq.Chessboard.prototype.movePiece = function(i, j, x, y) {
   var piece = this.grid_[j][i];
   piece.move(x, y);
   if (i !== x || j !== y) {
-    console.log("moved a piece to: x=" + x + ", y=" + y);
     this.grid_[y][x] = piece;
     this.grid_[j][i] = null;
     this.turn_ = 1 - this.turn_; // take turn
@@ -217,8 +217,8 @@ bq.Chessboard.prototype.handleClick_ = function(e) {
     if (selectedPiece) {
       var x = selectedPiece.getPosition(e.offsetX);
       var y = selectedPiece.getPosition(e.offsetY);
-      if (this.turn_ === selectedPiece.getColor() && selectedPiece.movable(this, x, y)) {
-        console.log("moving piece from x=" + this.x_ + ", y=" + this.y_);
+      if (this.turn_ === selectedPiece.getColor() && selectedPiece.movable(x, y)) {
+        console.log(selectedPiece.getFaceStr() + "\t (" + this.x_ + ", " + this.y_ + ") to (" + x + ", " + y + ")");
         this.movePiece(this.x_, this.y_, x, y);
       }
       this.x_ = -1;
@@ -239,7 +239,7 @@ bq.Chessboard.prototype.handleClick_ = function(e) {
       }
     }
     if (found) {
-      console.log("found a piece at: x=" + x + ", y=" + y);
+      //console.log("found a piece at: x=" + x + ", y=" + y);
       break;
     }
   }
@@ -261,7 +261,7 @@ bq.Chessboard.prototype.handleClick_ = function(e) {
 
   // If the clicked piece is not the one already selected, remove the
   // clicked piece and move the selected one to its position.
-  if (clickedPiece.getColor() !== selectedPiece.getColor() && selectedPiece.movable(this, x, y)) {
+  if (clickedPiece.getColor() !== selectedPiece.getColor() && selectedPiece.movable(x, y)) {
     clickedPiece.dispose();
     clickedPiece = null;
     this.grid_[y][x] = null;

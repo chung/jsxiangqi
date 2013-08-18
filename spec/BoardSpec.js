@@ -1,5 +1,5 @@
 describe("Chess board", function() {
-  var board, _ = function(x, y) { return {x: x, y: y, board: board}; };
+  var board;
   beforeEach(function() {
     board = new bq.Chessboard();
     board.render();
@@ -24,18 +24,4 @@ describe("Chess board", function() {
     expect(redJiang.getFace()).toEqual(bq.Chesspiece.Face.JIANG);
     expect(redJiang.getColor()).toEqual(bq.Chesspiece.Color.RED);
   });
-
-  it("should allow Red to move first", function() {
-    expect(_(4, 6)).movable(4, 5); // red Bing
-  });
-
-  it("should not allow Black to move first", function() {
-    expect(_(0, 3)).not.movable(0, 4); // black Bing
-  });
-
-  it("should not allow Red to make 2 moves consecutively", function() {
-    expect(_(4, 6)).movable(4, 5); // red Bing move first
-    expect(_(4, 5)).not.movable(4, 4); // red Bing can not move gain
-  });
-
 });

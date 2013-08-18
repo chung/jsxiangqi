@@ -67,6 +67,8 @@ bq.Chesspiece.Face = {
   BING: 6
 };
 
+bq.Chesspiece.FaceStr = ['Che', 'Ma', 'Xiang', 'Shi', 'Jiang', 'Pao', 'Bing'];
+
 /**
  * @type {number} The color of this piece.
  */
@@ -92,6 +94,10 @@ bq.Chesspiece.prototype.setFace = function(face) {
 
 bq.Chesspiece.prototype.getFace = function() {
   return this.face_;
+};
+
+bq.Chesspiece.prototype.getFaceStr = function() {
+  return bq.Chesspiece.FaceStr[this.face_];
 };
 
 bq.Chesspiece.prototype.getWidth = function() {
@@ -124,7 +130,8 @@ bq.Chesspiece.prototype.getOffset = function(x) {
   return bq.ChessboardRenderer.X + x * bq.ChessboardRenderer.Step - pieceWidth / 2;
 };
 
-bq.Chesspiece.prototype.movableWithoutMateCheck = function(board, x, y) {
+bq.Chesspiece.prototype.movableWithoutMateCheck = function(x, y) {
+  var board = this.parent_;
   var sign = this.getColor() * 2 - 1 // Red = -1, Black = 1
   var movex = Math.pow(this.x - x, 2);
   var movey = Math.pow(this.y - y, 2);
@@ -159,46 +166,38 @@ bq.Chesspiece.prototype.movableWithoutMateCheck = function(board, x, y) {
     return straightLine && countInBetween === 0;
   }
   else if (this.getFace() === bq.Chesspiece.Face.PAO) {
-    var capture = board.at(x, y) && board.at(x, y).getColor() !== this.getColor();
-    if (capture) {
-      // PAO jumps over 1 piece to capture
+    // capturing: PAO jumps over 1 piece to capture
+    if (board.at(x, y) && board.at(x, y).getColor() !== this.getColor()) {
       return straightLine && countInBetween === 1;
-	}
+    }
     // otherwise move like CHE
     return straightLine && countInBetween === 0;
   }
   return false;
 };
 
-bq.Chesspiece.prototype.movable = function(board, x, y) {
-  console.log("\n\n-----------------------\n");
-  if (this.movableWithoutMateCheck(board, x, y)) {
-    var capture = board.at(x, y);
-    var ox = this.x;
-    var oy = this.y;
+bq.Chesspiece.prototype.movable = function(x, y) {
+  var board = this.parent_;
+  if (this.movableWithoutMateCheck(x, y)) {
+    var piece = board.at(x, y);
+    var ox = this.x, oy = this.y;
     board.movePiece(ox, oy, x, y); // suppose we move the piece
-    var jx = board.jiang(1-board.turn_).x;
-    var jy = board.jiang(1-board.turn_).y;
-    var jx2 = board.jiang().x;
-    var jy2 = board.jiang().y;
+    var j1 = board.jiang(1-board.turn_);
+    var j2 = board.jiang();
     var canMove = true;
     // we need to check if any move from opponent can capture the JIANG
-    console.log("jx=" + jx + ", jy=" + jy + "\njx2=" + jx2 + ", jy2=" + jy2);
-    if (jx === jx2 && countPiecesInBetween(board, jx, jy, jx2, jy2) === 0) {
+    if (j1.x === j2.x && countPiecesInBetween(board, j1.x, j1.y, j2.x, j2.y) === 0) {
       console.log("JIANGs facing directly not allowed");
       canMove = false;
     } else {
-      board.pieces(board.turn_).map(function(piece) {
-        console.log(piece);
-        if (piece.movableWithoutMateCheck(board, jx, jy)) {
+      board.pieces().map(function(p) {
+        if (p.movableWithoutMateCheck(j1.x, j1.y)) {
           canMove = false;
-          console.log("CHECK jx=" + jx + ", jy=" + jy);
         }
       });
     }
-
     board.movePiece(x, y, ox, oy); // undo the move
-    board.grid_[y][x] = capture;
+    board.grid_[y][x] = piece;
     return canMove;
   }
   return false;
