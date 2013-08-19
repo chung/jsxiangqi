@@ -137,7 +137,7 @@ bq.Chessboard.prototype.newGame = function() {
 
 bq.Chessboard.prototype.pieces = function(color) {
   var turn = color !== undefined ? color: this.turn_;
-  var result = []
+  var result = new Array();
   for (var j = 0; j < this.grid_.length; j++) {
     var row = this.grid_[j];
     for (var i = 0; i < row.length; i++) {
@@ -150,6 +150,8 @@ bq.Chessboard.prototype.pieces = function(color) {
   return result;
 };
 
+// Return the Jiang piece for the color
+// if not specified, the current turn
 bq.Chessboard.prototype.jiang = function(color) {
   var turn = color !== undefined ? color: this.turn_;
   for (var j = 0; j < this.grid_.length; j++) {

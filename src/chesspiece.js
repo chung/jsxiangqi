@@ -190,7 +190,7 @@ bq.Chesspiece.prototype.movable = function(x, y) {
       console.log("JIANGs facing directly not allowed");
       canMove = false;
     } else {
-      board.pieces().map(function(p) {
+      board.pieces().forEach(function(p) {
         if (p.movableWithoutMateCheck(j1.x, j1.y)) {
           canMove = false;
         }

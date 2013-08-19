@@ -10,9 +10,9 @@ Then run build.cmd will build the final chess.js
 
 Open the chess.html and enjoy.
 
-## Limitations
+## Testing
 
-Currently there is no validation. You can move any piece to any position.
+Open SpecRunner.html should run all the tests (using Jasmine).
 
 ## TODOs
 
