@@ -38,5 +38,8 @@
         <File name="README.md" />
         <File name="SpecRunner.html" />
         <File name="notepad++.workspace" />
+        <File name="app.js" />
+        <File name="package.json" />
+        <File name="Procfile" />
     </Project>
 </NotepadPlus>
